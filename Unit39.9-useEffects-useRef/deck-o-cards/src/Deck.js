@@ -21,17 +21,20 @@ const Deck = () => {
         setCard(<Card imgSrc={imgSrc} keepDrawing={draw}/>);
     }
 
-    const keepDrawing = () => {
-        setDraw(!draw);
-        setCard(<Card imgSrc={imgSrc} keepDrawing={draw} drawFunc={drawACard}/>)
-    }
-
-    if (draw) {
-        useEffect(() => {
-            const intId = setInterval(drawACard, 1000);
-            return () => clearInterval(intId);
-        }, []);
-    }
+    useEffect(() => {
+        const drawRepeat = async () => {
+            const res = await axios.get(`http://deckofcardsapi.com/api/deck/${deckId}/draw/?count=1`);
+            imgSrc = res.data.cards[0].image;
+            setImgSrc(imgSrc);
+            setCard(<Card imgSrc={imgSrc} keepDrawing={draw}/>);
+        }
+        if (draw) {
+            const intId = setInterval(drawRepeat, 1000)
+            return () => {
+                clearInterval(intId);
+            }    
+        }
+    }, [draw]);
 
     useEffect(() => {
         const loadDeck = async () => {
@@ -59,7 +62,7 @@ const Deck = () => {
                 {card ? card : <p>Loading...</p>}
             </div>
             <button onClick={drawACard}>New Card</button>
-            <button onClick={keepDrawing}>Keep Drawing</button>
+            <button onClick={() => setDraw(!draw)}>{draw ? "Stop Drawing" : "Keep Drawing"}</button>
         </>
     )
 }
