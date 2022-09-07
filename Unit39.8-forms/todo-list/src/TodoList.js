@@ -9,20 +9,23 @@ const TodoList = () => {
     // BUG: in the removeFunc function, todos is shortened to include everything BEFORE THE clicked component
     // The state is not being read correctly, and I cannot get it
     const removeFunc = (id) => {
-        console.log(todos.slice());
-        const todoToDie = todos.slice().find((todo) => {
+        debugger;
+        console.log('todos: ', todos);
+        const todoToDie = todos.find((todo) => {
             const match = todo.props.id === id;
             return match;
         });
-        if (todoToDie) {
-            const idx = todos.indexOf(todoToDie);
-            setTodos(todos => {
-                todos = todos.splice(idx, 1);
-                return todos;
-            });
-        } else {
-            return todos;
-        }
+
+        // if (todoToDie) {
+        //     const idx = todos.indexOf(todoToDie);
+        //     setTodos(todos => {
+        //         todos = todos.splice(idx, 1);
+        //         return todos;
+        //     });
+
+        // } else {
+        //     return todos;
+        // }
     }
 
     const addTodo = (task) => {
