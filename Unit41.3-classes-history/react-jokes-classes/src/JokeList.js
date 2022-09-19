@@ -5,9 +5,10 @@ import "./static/JokeList.css";
 
 class JokeList extends React.Component {
   constructor () {
-    super()
+    super();
     this.state = {jokes : [],
       sortedJokes : []};
+    this.vote.bind(this);
     this.setState.bind(this);
   }
 
@@ -47,16 +48,6 @@ class JokeList extends React.Component {
   vote(id, delta) {
     const joke = JSON.parse(window.localStorage.getItem(id));
     window.localStorage.setItem(id, joke + delta);
-
-    // I incorporated state just to rerender on the change
-    // taken parts from solution
-    // BUG I need to get ahead with the course
-
-    this.setState((state) => ({
-      jokes: state.jokes.map(j =>
-        j.id === id ? { ...j, votes: j.votes + delta } : j
-      )
-    }));
   }
 
   async componentDidMount() {
@@ -68,7 +59,7 @@ class JokeList extends React.Component {
 
   render() {
     return (
-      <div className="JokeList">
+      <div className="JokeList" onClick={() => this.setState({...this.state})}>
         <button className="JokeList-getmore" onClick={() => this.setState({ jokes: [] })}>
           Get New Jokes
         </button>
